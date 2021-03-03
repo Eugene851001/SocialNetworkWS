@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import {signin} from './apiAuth'
 import {Redirect} from 'react-router-dom'
 import Header from '../Header'
 import Footer from '../Footer'
@@ -26,8 +25,8 @@ class Logination extends Component {
 	  if (response.err) {
 	    this.setState({err: response.err});
 		} else {
-		  this.setState({signedIn: true, userId: response.userId});
 		  document.cookie = `token=${response.token}`;
+		  this.setState({signedIn: true, userId: response.userId});
 		}
 	})
 

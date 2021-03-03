@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import {signup} from './apiAuth'
 import Header from '../Header'
 import Footer from '../Footer'
 import {Redirect} from 'react-router-dom'
@@ -32,8 +31,8 @@ class Registration extends Component {
       if (response.err) {
         this.setState({error: response.err});
       } else {
-        this.setState({signedUp: true, userId: response.userId});
         document.cookie = `token=${response.token}`;
+        this.setState({signedUp: true, userId: response.userId});
       }
     })
   }

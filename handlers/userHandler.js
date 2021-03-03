@@ -33,18 +33,19 @@ module.exports = (io, socket, clients) => {
 
     socket.on('user:followers', (userData) => {
             console.log('Get followers');
-            user.getFollowers(userData, socket);
+            user.getFollowers(userData, socket, clients);
     })
 
-    socket.on('user:followers', (userData) => {
+    socket.on('user:following', (userData) => {
             console.log('Get following');
-            user.getFollowing(userData, socket);
+            user.getFollowing(userData, socket, clients);
     })
 
-    socket.on('user:editPhoto', (userData) => {[
+    socket.on('user:editPhoto', (userData) => {
         requireToken(socket, userData, () => {
             console.log('Edit photo');
             user.editPhoto(userData, socket);
         })
-    ]})
+    })
+
 }

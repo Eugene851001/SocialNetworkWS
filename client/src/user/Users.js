@@ -15,10 +15,10 @@ class Users extends Component {
 	}
   }	  
   
-  
   componentDidMount() { 
 	let token = Cookies.get('token')
 	socket.on('users', (response) => {
+	  console.log(response.users);
 	  this.setState({users: response.users})
 	})
 	socket.emit('users', {token: token});

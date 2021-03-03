@@ -62,12 +62,17 @@ class Posts extends Component {
 	    this.setState({posts: this.state.posts});
 	  })
 
+	  socket.on('error:401', () => {
+	    this.setState({redirect: true}); 
+	  })
+
 	  socket.emit('posts', {token: token})
     }
 
 	componentWillUnmount() {
 		socket.removeAllListeners('posts');
 		socket.removeAllListeners('post:create');
+		socket.removeAllListeners('error:401');
 	}
 
     render(){

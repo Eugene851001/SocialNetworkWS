@@ -102,6 +102,10 @@ class Post extends Component {
 		}
 	})
 
+	socket.on('error:401', () => {
+	  this.setState({redirectToLogination: true});
+	})
+
   }
 
   componentWillUnmount() {
@@ -109,6 +113,7 @@ class Post extends Component {
 	socket.removeAllListeners('post:update');
 	socket.removeAllListeners('post:like');
 	socket.removeAllListeners('post:unlike');
+	socket.removeAllListeners('error:401');
   }
   
   render() {

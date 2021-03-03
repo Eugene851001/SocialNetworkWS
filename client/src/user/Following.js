@@ -17,7 +17,6 @@ class Following extends Component {
   
   componentDidMount() {
 	socket.on('user:following', (response) => {
-	  alert('response');
 	  this.setState({users: response.users});
 	});
   

@@ -56,6 +56,10 @@ class Profile extends Component {
       this.setState({photo: response.photo});
     }) 
 
+    socket.on('error:401', () => {
+      this.setState({redirect: true})
+    })
+
     let token = Cookies.get('token');
     socket.emit('user:get', {token: token, userId: userId})
   }
@@ -99,6 +103,7 @@ class Profile extends Component {
     socket.removeAllListeners('user:follow');
     socket.removeAllListeners('user:editPhoto');
     socket.removeAllListeners('user:update');
+    socket.removeAllListeners('error:401');
   }
 
   render() {
@@ -121,8 +126,9 @@ class Profile extends Component {
               <td>
                 <img src={this.state.photo} width="320" height="240"/><br></br>
               </td>
-              <td>
-                {this.state.online ? 'Онлайн' : 'Не в сети'}
+              <td valign="top">
+                  <h2>{this.state.name}</h2>
+                  {this.state.online ? 'Онлайн' : 'Не в сети'}
               </td>
             </tr>
           </table>
@@ -136,7 +142,6 @@ class Profile extends Component {
               <td><Link to={`/Followers/${this.state.userId}`}>Подписчики</Link></td>
             </tr>
           </table>
-			    <h2>{this.state.name}</h2>
 		    </article>
 		    <Footer />
       </div>

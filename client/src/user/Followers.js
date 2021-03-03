@@ -17,7 +17,6 @@ class Users extends Component {
   
   componentDidMount() {
 	socket.on('user:followers', (response) => {
-	  alert('response')
       this.setState({users: response.users});
 	});
 

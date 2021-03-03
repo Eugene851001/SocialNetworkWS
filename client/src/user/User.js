@@ -1,30 +1,41 @@
-import React, {useState, useEffect} from 'react'
+import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
 import socket from '../socket'
 
-function User(props) {
-  let [user, setUser] = useState(props.user)
+class User extends Component {
 
-  useEffect(() => {
+  constructor(props) {
+    super();
+    console.log(props);
+    this.state = {
+      user: props.user
+    }
+  }
+
+  componentDidMount() {
     socket.on('user:update', (response) => {
       console.log(response);
-      if (response.userId == user.userId) {
-        user.online = response.online;
-        console.log(user);
-        setUser(user);
+      if (response.userId == this.state.user.userId) {
+        this.state.user.online = response.online;
+        this.setState({user: this.state.user})
       }
     })
+  }
 
-    return () => {socket.removeAllListeners('user:update')}
-  })
+  componentWillUnmount() {
+    socket.removeAllListeners('user:update');
+  }
 
-  return (
-    <div>
-	  <img src={user.photo} width="32" height="32"/>
-	  <Link to={"/Profile/" + user.userId}>{user.name}</Link>
-    {user.online ? 'Онлайн' : 'Не в сети'}
-	</div>
-  );
+  render() {
+    let {user} = this.state;
+    return (
+      <div>
+      <img src={user.photo} width="32" height="32"/>
+      <Link to={"/Profile/" + user.userId}>{user.name}</Link>
+      {user.online ? 'Онлайн' : 'Не в сети'}
+    </div>
+    );
+  }
 }
 
 export default User;

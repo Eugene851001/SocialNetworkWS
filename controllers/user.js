@@ -96,7 +96,9 @@ exports.showUsers = function(socket, clientsOnline) {
 }
 
 function hasUser(users, id) {
+  console.log(`Id to find: ${id}`);
   for (let userId of users) {
+	  console.log(userId);
 	  if (userId == id) {
 		  return true;
 	  }
@@ -105,7 +107,7 @@ function hasUser(users, id) {
   return false;
 }
 
-exports.getFollowing = function(userData, socket) {
+exports.getFollowing = function(userData, socket, clientsOnline) {
   let userId = userData.userId;
   if (userId == 'me') {
     userId = socket.userId;
@@ -117,13 +119,19 @@ exports.getFollowing = function(userData, socket) {
 	  console.log(err);
 	  return;
 	}
+
+	if (!user) {
+	  console.log(`User with id ${userId} not found`);
+	  return;
+	}
 	
     User.find({_id: { $in: user.following}}, function(err, users){
 	  let usersToSend = users.map((user) => {
 	    return {
 		  name: user.name,
 		  photo: "../uploads/" + user.photo,
-		  userId: user._id
+		  userId: user._id,
+		  online: hasUser(clientsOnline.values(), user._id)
 		}
 	  });
 	  socket.emit('user:following', {users: usersToSend});   
@@ -131,7 +139,7 @@ exports.getFollowing = function(userData, socket) {
   });
 }
 
-exports.getFollowers = function(userData, socket) {
+exports.getFollowers = function(userData, socket, clientsOnline) {
   let userId = userData.userId;  
   if (userId == 'me') {
     userId = socket.userId;
@@ -149,7 +157,8 @@ exports.getFollowers = function(userData, socket) {
 	    return {
 		  name: user.name,
 		  photo: "../uploads/" + user.photo,
-		  userId: user._id
+		  userId: user._id,
+		  online: hasUser(clientsOnline.values(), user._id)
 		}
 	  });
 	  socket.emit('user:followers', {users: usersToSend});

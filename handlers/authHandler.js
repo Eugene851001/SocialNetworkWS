@@ -15,7 +15,7 @@ module.exports = (io, socket, clients) => {
 
   socket.on('auth:signout', () => {
       console.log('Sign out');
-   //   auth.signout(socket, clients);
+      auth.signout(socket, clients);
   })
 
 }

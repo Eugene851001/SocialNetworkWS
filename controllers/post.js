@@ -53,7 +53,8 @@ exports.createPost = function(userData, socket, clientsOnline) {
 		  console.log(err);
 		  return;
 		}
-
+        
+		postToSend.myPost = false;
 		for (let [socketId, clientId] of clientsOnline) {
 		  if (user.followers.indexOf(clientId) != -1) {
 		    console.log('Send notification');

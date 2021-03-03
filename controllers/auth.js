@@ -4,10 +4,11 @@ const jwt = require('jsonwebtoken');
 exports.signout = (socket, clientsOnline) => {
   console.log('Signed out');
   if (clientsOnline.has(socket.id)) {
+    console.log('Emit signed out');
+    socket.broadcast.emit('user:update', {userId: clientsOnline.get(socket.id), online: false})
     clientsOnline.delete(socket.id);
   }
 
-  response.json();
 }
 
 exports.signup = (userData, socket) => {
@@ -64,6 +65,7 @@ exports.requireToken = (socket, userData, next) => {
     jwt.verify(token, process.env.JWT_KEY, (err, payload) => {
       if (err) {
         console.log(err);
+        socket.emit('error:401');
         return;
       }
 
@@ -71,5 +73,7 @@ exports.requireToken = (socket, userData, next) => {
       console.log(socket.userId)
       next();
     })
+  } else {
+    socket.emit('error:401');
   } 
 }
